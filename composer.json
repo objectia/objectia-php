@@ -1,5 +1,5 @@
 {
-  "name": "objectia/sdk",
+  "name": "objectia/client",
   "description": "PHP client for Objectia API",
   "license": "MIT",
   "type": "library",
