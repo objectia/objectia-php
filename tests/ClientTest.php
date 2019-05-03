@@ -8,7 +8,6 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 {
     protected $httpClient;
     protected $client;
-
     protected $apiKey;
 
     public function setUp()
@@ -27,13 +26,15 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    /*
-public function testGetUser()
-{
-$user = $this->client->getUser("123456");
-$this->assertNotNull($user);
-}
+    public function testGetUsage()
+    {
+        $usage = $this->client->usage->get();
+        //var_dump($usage);
+        $this->assertNotNull($usage);
+        $this->assertNotNull($usage["geoip_requests"]);
+    }
 
+/*
 public function testGetUnknownUser()
 {
 try {

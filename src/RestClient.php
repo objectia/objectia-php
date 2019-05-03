@@ -4,14 +4,14 @@ namespace Objectia;
 
 require_once "Constants.php";
 
-use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use Objectia\Exceptions\APIConnectionException;
 use Objectia\Exceptions\APITimeoutException;
 use Objectia\Exceptions\ResponseException;
 
-abstract class RestClient
+class RestClient
 {
     protected $apiKey;
     protected $http;
@@ -24,7 +24,7 @@ abstract class RestClient
             throw new \InvalidArgumentException("No API key provided");
         }
 
-        $this->http = new HttpClient([
+        $this->http = new \GuzzleHttp\Client([
             "base_uri" => API_BASE_URL,
             "timeout" => $timeout,
         ]);
@@ -35,27 +35,27 @@ abstract class RestClient
         $this->http = $httpClient;
     }
 
-    protected function get($path)
+    public function get($path)
     {
         return $this->execute("GET", $path);
     }
 
-    protected function post($path, $params)
+    public function post($path, $params)
     {
         return $this->execute("POST", $path, $params);
     }
 
-    protected function put($path, $params)
+    public function put($path, $params)
     {
         return $this->execute("PUT", $path, $params);
     }
 
-    protected function patch($path, $params)
+    public function patch($path, $params)
     {
         return $this->execute("PATCH", $path, $params);
     }
 
-    protected function delete($path)
+    public function delete($path)
     {
         return $this->execute("DELETE", $path);
     }
@@ -77,7 +77,8 @@ abstract class RestClient
                 "headers" => $headers,
                 "json" => $params,
             ]);
-            return $response->getBody();
+            $result = json_decode($response->getBody(), true);
+            return $result["data"];
         } catch (ConnectException $e) {
             $reason = $e->getMessage();
             $pos = strpos($reason, "cURL error 28");

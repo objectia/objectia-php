@@ -27,6 +27,7 @@ class Error
      */
     public static function fromJSON($body)
     {
+        echo $body;
         $mapper = new ObjectMapper();
         return $mapper->mapJson($body, Error::class);
     }

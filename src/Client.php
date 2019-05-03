@@ -4,48 +4,14 @@ namespace Objectia;
 
 require "vendor/autoload.php";
 
-class Client extends RestClient
+class Client
 {
-    public function createUser($email, $phone, $countryCode, $sendInstallLink = false)
-    {
-        $params = [
-            "email" => $email,
-            "phone" => $phone,
-            "country_code" => $countryCode,
-            "send_install_link" => $sendInstallLink,
-        ];
+    // APIs
+    public $usage;
 
-        $body = $this->post("/users", $params);
-        return User::fromJSON($body);
-    }
-
-    public function getUser($userId)
+    public function __construct($apiKey, $timeout = DEFAULT_TIMEOUT)
     {
-        $body = $this->get("/users/" . urlencode($userId));
-        return User::fromJSON($body);
-    }
-
-    public function requestSms($userId, $force = false)
-    {
-        $params = [
-            "force" => $force,
-        ];
-        $body = $this->post("/users/" . urlencode($userId) . "/sms", $params);
-        return Sms::fromJSON($body);
-    }
-
-    public function requestCall($userId, $force = false)
-    {
-        $params = [
-            "force" => $force,
-        ];
-        $body = $this->post("/users/" . urlencode($userId) . "/call", $params);
-        return Call::fromJSON($body);
-    }
-
-    public function removeUser($userId)
-    {
-        $body = $this->delete("/users/" . urlencode($userId));
-        return User::fromJSON($body);
+        $restClient = new RestClient($apiKey, $timeout);
+        $this->usage = new UsageAPI($restClient);
     }
 }

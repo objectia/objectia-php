@@ -1,9 +1,9 @@
 {
-  "name": "objectia",
+  "name": "objectia/sdk",
   "description": "PHP client for Objectia API",
   "license": "MIT",
   "type": "library",
-  "keywords": ["api", "objectia", "geolocation", "geoip"],
+  "keywords": ["objectia", "api", "geolocation", "geoip"],
   "homepage": "https://github.com/objectia/objectia-php",
   "authors": [{
     "name": "Objectia",
