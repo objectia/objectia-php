@@ -1,0 +1,32 @@
+{
+  "name": "objectia",
+  "description": "PHP client for Objectia API",
+  "license": "MIT",
+  "type": "library",
+  "keywords": ["api", "objectia", "geolocation", "geoip"],
+  "homepage": "https://github.com/objectia/objectia-php",
+  "authors": [{
+    "name": "Objectia",
+    "email": "hello@objectia.com",
+    "role": "developer",
+    "homepage": "https://objectia.com"
+  }],
+  "support": {
+    "email": "hello@objectia.com"
+  },
+  "require": {
+    "php": ">=7.1",
+    "guzzlehttp/guzzle": "^6.3",
+    "lcobucci/jwt": "^3.2",
+    "mintware-de/json-object-mapper": "^1.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.0.0",
+    "phpunit/php-code-coverage": "^6.0.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "Objectia\\": "src"
+    }
+  }
+}

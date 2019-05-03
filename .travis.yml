@@ -1,0 +1,20 @@
+language: php
+
+php:
+  - '7.1'
+  - '7.2'
+  - '7.3'
+ 
+#before_install:
+#  - npm -g install git+https://git@github.com/objectia/twostep-mock-server.git
+#  - NODE_VER=`node --version`
+#  - node /home/travis/.nvm/versions/node/$NODE_VER/lib/node_modules/twostep-mock-server/lib/index.js &
+
+before_script:
+  - composer install
+
+script: 
+  - ./vendor/bin/phpunit -v --configuration ./phpunit.xml.dist
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
