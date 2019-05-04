@@ -6,3 +6,5 @@ logs
 /vendor
 /coverage
 phpunit.xml
+
+.vscode/
