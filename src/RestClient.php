@@ -7,6 +7,7 @@ require_once "Constants.php";
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\MultipartStream;
 use Objectia\Exceptions\APIConnectionException;
 use Objectia\Exceptions\APITimeoutException;
 use Objectia\Exceptions\ResponseException;
@@ -35,48 +36,55 @@ class RestClient
         $this->http = $httpClient;
     }
 
-    public function get($path)
+    public function get($path, $headers = array())
     {
-        return $this->execute("GET", $path);
+        return $this->execute("GET", $path, array(), $headers);
     }
 
-    public function post($path, $params)
+    public function post($path, $params, $headers = array())
     {
-        return $this->execute("POST", $path, $params);
+        return $this->execute("POST", $path, $params, $headers);
     }
 
-    public function put($path, $params)
+    public function put($path, $params, $headers = array())
     {
-        return $this->execute("PUT", $path, $params);
+        return $this->execute("PUT", $path, $params, $headers);
     }
 
-    public function patch($path, $params)
+    public function patch($path, $params, $headers = array())
     {
-        return $this->execute("PATCH", $path, $params);
+        return $this->execute("PATCH", $path, $params, $headers);
     }
 
-    public function delete($path)
+    public function delete($path, $headers = array())
     {
-        return $this->execute("DELETE", $path);
+        return $this->execute("DELETE", $path, array(), $headers);
     }
 
-    protected function execute($method, $path, $params = array())
+    protected function execute($method, $path, $params = array(), $headers = array())
     {
-        $headers = [
+        $std_headers = [
             "Authorization" => "Bearer " . $this->apiKey,
             "User-Agent" => "objectia-php/" . VERSION,
             "Accept" => "application/json",
+            "Content-Type" => "application/json",
         ];
+        $headers = array_merge($std_headers, $headers);
 
+        $payload = array();
         if (!is_null($params)) {
-            $headers["Content-Type"] = "application/json";
+            if ($headers["Content-Type"] == "application/json") {
+                $payload["json"] = $params;
+            } else if ($headers["Content-Type"] == "multipart/form-data") {
+                $boundary = $this->generateRandomString();
+                $headers["Content-Type"] = "multipart/form-data; boundary=" . $boundary;
+                $payload["body"] = new \GuzzleHttp\Psr7\MultipartStream($params, $boundary);
+            }
         }
+        $payload["headers"] = $headers;
 
         try {
-            $response = $this->http->request($method, $path, [
-                "headers" => $headers,
-                "json" => $params,
-            ]);
+            $response = $this->http->request($method, $path, $payload);
             $result = json_decode($response->getBody(), true);
             return $result["data"];
         } catch (ConnectException $e) {
@@ -109,5 +117,10 @@ class RestClient
                 throw new APIConnectionException($e->getMessage());
             }
         }
+    }
+
+    protected function generateRandomString($length = 32)
+    {
+        return substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length / strlen($x)))), 1, $length);
     }
 }

@@ -3,7 +3,7 @@
   "description": "PHP client for Objectia API",
   "license": "MIT",
   "type": "library",
-  "keywords": ["objectia", "api", "geolocation", "geoip"],
+  "keywords": ["objectia", "api", "mail", "geolocation", "geoip"],
   "homepage": "https://github.com/objectia/objectia-php",
   "authors": [{
     "name": "Objectia",

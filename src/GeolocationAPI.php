@@ -4,7 +4,7 @@ namespace Objectia;
 
 require "vendor/autoload.php";
 
-class UsageAPI
+class GeolocationAPI
 {
     protected $restClient;
 
@@ -13,8 +13,8 @@ class UsageAPI
         $this->restClient = $restClient;
     }
 
-    public function get()
+    public function get($ip)
     {
-        return $this->restClient->get("/v1/usage");
+        return $this->restClient->get("/v1/geoip/" . $ip);
     }
 }
