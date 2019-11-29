@@ -6,7 +6,7 @@ PHP client for [Objectia API](https://objectia.com)&reg;
 
 ## Documentation
 
-See the [PHP API docs](https://docs.objectia.com/guide/php.html).
+See the [PHP API docs](https://docs.objectia.com/php/).
 
 
 ## Installation
