@@ -3,6 +3,7 @@
 namespace ObjectiaTest;
 
 use Objectia\Client as Client;
+use Objectia\Exceptions\ResponseException;
 
 class ClientTest extends \PHPUnit\Framework\TestCase
 {
@@ -14,6 +15,12 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     {
         $this->apiKey = getenv("OBJECTIA_APIKEY");
         $this->client = new Client($this->apiKey, true);
+    }
+
+    public function testGetVersion()
+    {
+        $version = $this->client->getVersion();
+        $this->assertEquals(VERSION, $version);
     }
 
     public function testGetUsage()
@@ -59,6 +66,18 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(2, count($location));
         foreach ($location as $loc) {
             $this->assertEquals("US", $loc["country_code"]);
+        }
+    }
+
+    public function testGetGeolocationWithInvalidInput()
+    {
+        try {
+            $location = $this->client->geolocation->get("x");
+            $this->asserNull($location);
+        } catch (ResponseException $e) {
+            $this->assertEquals(400, $e->getStatus());
+            $this->assertEquals("err-invalid-ip", $e->getErrorCode());
+            $this->assertEquals("Invalid IP address", $e->getMessage());
         }
     }
 

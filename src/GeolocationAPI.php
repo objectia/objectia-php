@@ -19,7 +19,7 @@ class GeolocationAPI
         if (!empty($query)) {
             $query = "?" . $query;
         }
-        var_dump($query);
+        //var_dump($query);
         return $this->restClient->get("/v1/geoip/" . $ip . $query);
     }
 

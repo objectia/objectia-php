@@ -18,4 +18,9 @@ class Client
         $this->geolocation = new GeolocationAPI($restClient);
         $this->mail = new MailAPI($restClient);
     }
+
+    public function getVersion()
+    {
+        return VERSION;
+    }
 }

@@ -100,13 +100,14 @@ class RestClient
                 $response = $e->getResponse();
                 $status = $response->getStatusCode();
                 $message = $e->getMessage();
+                //$code = $e->getMessage();
 
                 $pieces = explode("\n", $message);
                 if (count($pieces) > 1) {
                     $body = $pieces[1];
                     $error = Error::fromJSON($body);
                     if ($error->isValid()) {
-                        throw new ResponseException($status, $error->message); //FIXME: code!!!
+                        throw new ResponseException($status, $error->message, $error->code);
                     } else {
                         throw new ResponseException($status, $message);
                     }
